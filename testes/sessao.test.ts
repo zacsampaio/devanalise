@@ -141,6 +141,27 @@ describe('login com o OAuth App do GitHub', () => {
     vi.unstubAllGlobals()
   })
 
+  it('token recusado pelo GitHub encerra a sessão: sem isso, /entrar e / se redirecionam em laço', async () => {
+    // token revogado (ex.: no GitHub, em Settings → Applications), mas o cookie ainda abre
+    vi.stubGlobal('fetch', vi.fn(async () => new Response('{"message":"Bad credentials"}', { status: 401 })))
+    const cookie = { [COOKIE_GITHUB]: selar(COOKIE_GITHUB, sessao()), [COOKIE_JIRA]: 'qualquer' }
+    const rotas = [
+      async () => (await import('@/app/api/coleta/inicio/route')).GET(pedido('/api/coleta/inicio', cookie)),
+      async () => {
+        const { POST } = await import('@/app/api/coleta/historico/route')
+        const corpo = { dono: 'empresa', nome: 'api', branch: 'main', desde: '2026-01-01T00:00:00Z', depois: null }
+        return POST(new NextRequest('https://painel.exemplo/api/coleta/historico', { method: 'POST', body: JSON.stringify(corpo), headers: { cookie: `${COOKIE_GITHUB}=${cookie[COOKIE_GITHUB]}` } }))
+      },
+    ]
+    for (const rota of rotas) {
+      const r = await rota()
+      expect(r.status).toBe(401)
+      const apagados = r.headers.getSetCookie().filter((c) => /Expires=Thu, 01 Jan 1970/.test(c)).map((c) => c.split('=')[0])
+      expect(apagados).toEqual(expect.arrayContaining([COOKIE_GITHUB, COOKIE_JIRA]))
+    }
+    vi.unstubAllGlobals()
+  })
+
   it('desconectar só o Jira não revoga o GitHub', async () => {
     const f = vi.fn()
     vi.stubGlobal('fetch', f)

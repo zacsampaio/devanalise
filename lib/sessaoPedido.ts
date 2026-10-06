@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { credencialJiraOAuth, type CredencialJira } from './jira'
 import { modoHospedado } from './modo'
 import { renovarJira } from './oauth'
-import { abrir, COOKIE_GITHUB, COOKIE_JIRA, DURACAO_JIRA, opcoesCookie, precisaRenovar, selar, type SessaoGithub, type SessaoJira } from './sessao'
+import { abrir, COOKIE_GITHUB, COOKIE_JIRA, COOKIE_JIRA_SITES, DURACAO_JIRA, opcoesCookie, precisaRenovar, selar, type SessaoGithub, type SessaoJira } from './sessao'
 
 /**
  * Sessão de quem fez o pedido às rotas /api/coleta (modo hospedado). Cada
@@ -20,7 +20,16 @@ export function sessaoGithub(pedido: NextRequest): SessaoGithub | null {
   return abrir<SessaoGithub>(COOKIE_GITHUB, pedido.cookies.get(COOKIE_GITHUB)?.value)
 }
 
-export const semSessao = () => erro('Sessão expirada: entre de novo com o GitHub.', 401, 'sessao')
+/**
+ * Manda a pessoa entrar de novo e apaga a sessão. Quando o GitHub recusa o
+ * token (revogado), o cookie ainda abre: sem apagá-lo, o proxy devolveria
+ * /entrar para o início, que coleta, recebe 401 e volta a /entrar — em laço.
+ */
+export function semSessao() {
+  const resposta = erro('Sessão expirada: entre de novo com o GitHub.', 401, 'sessao')
+  for (const nome of [COOKIE_GITHUB, COOKIE_JIRA, COOKIE_JIRA_SITES]) resposta.cookies.delete(nome)
+  return resposta
+}
 
 /** Erro de token recusado pelo GitHub (revogado, expirado): a pessoa entra de novo. */
 export const tokenRecusado = (e: unknown) => Boolean((e as { naoAutorizado?: boolean } | null)?.naoAutorizado)
