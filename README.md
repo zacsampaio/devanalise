@@ -24,6 +24,7 @@ Dashboard das suas entregas montado a partir dos **seus commits no GitHub** e do
 | `/demandas` | Todas as demandas com filtros (tipo, sistema, impacto, busca). Aceita filtros na URL: `?impacto=alto`, `?tipo=correcao`, `?q=webhook` |
 | `/demandas/<chamado>` | Uma demanda: chamado no Jira, período, linha do tempo dos commits e arquivos mais alterados |
 | `/sistemas` e `/sistemas/<repo>` | Repositórios agrupados pelo dono e o histórico de cada um |
+| `/privacy` | Política de privacidade. Pública no modo hospedado, para o link pedido pela Atlassian e pelo GitHub App |
 
 ## Dois modos: local ou hospedado
 
@@ -197,7 +198,7 @@ Como funciona:
 2. **Permissions** → **Jira API** → **Add** → **Configure** → adicione o escopo **`read:jira-work`**.
 3. **Authorization** → **OAuth 2.0 (3LO)** → **Callback URL**: `https://SEU-ENDERECO/api/auth/atlassian/callback`.
 4. **Settings**: copie o **Client ID** e o **Secret**.
-5. **Distribution**: enquanto estiver *Not sharing*, só a sua conta Atlassian consegue conectar. Para outras pessoas, mude para **Sharing** e preencha o que a Atlassian pede (política de privacidade, dados pessoais).
+5. **Distribution**: enquanto estiver *Not sharing*, só a sua conta Atlassian consegue conectar. Para outras pessoas, mude para **Sharing** e preencha o que a Atlassian pede. Em **Privacy policy**, use `https://SEU-ENDERECO/privacy` (defina `PAINEL_CONTATO` para mostrar um contato nela).
 
 Se a conta tiver acesso a mais de um site do Jira, o painel pergunta qual usar.
 
@@ -213,6 +214,7 @@ Se a conta tiver acesso a mais de um site do Jira, o painel pergunta qual usar.
    | `SESSAO_SEGREDO` | 32+ caracteres aleatórios: `node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"` |
    | `ATLASSIAN_CLIENT_ID` / `ATLASSIAN_CLIENT_SECRET` | Opcional, do app da Atlassian |
    | `PAINEL_URL` | Opcional: o endereço público, se o painel tiver mais de um domínio |
+   | `PAINEL_CONTATO` | Opcional: e-mail ou URL de contato mostrado na política de privacidade |
 
    **Não** defina `GITHUB_TOKEN`, `JIRA_*` nem `PAINEL_SENHA` lá: são do modo local.
 3. **Deploy**. Abra o endereço e entre com o GitHub.
@@ -244,6 +246,7 @@ Para testar o modo hospedado na sua máquina, crie um segundo GitHub App com a C
 | `SESSAO_SEGREDO` | hospedado | — | Chave dos cookies de login (32+ caracteres) |
 | `ATLASSIAN_CLIENT_ID` / `ATLASSIAN_CLIENT_SECRET` | não | — | App OAuth da Atlassian, para "Conectar Jira" |
 | `PAINEL_URL` | não | origem do pedido | Endereço público usado nas URLs de retorno do OAuth |
+| `PAINEL_CONTATO` | não | — | E-mail ou URL de contato exibido em `/privacy` |
 
 O `.env` nunca deve ir para o git (já está no `.gitignore`).
 

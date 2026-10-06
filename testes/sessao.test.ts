@@ -68,8 +68,8 @@ describe('proxy no modo hospedado', () => {
     expect(proxy(pedido('/api/coleta/inicio')).status).toBe(401)
   })
 
-  it('a tela de entrada e o login abrem sem sessão', () => {
-    for (const c of ['/entrar', '/api/auth/github', '/api/auth/github/callback', '/api/auth/sair']) expect(proxy(pedido(c)).status).toBe(200)
+  it('a tela de entrada, o login e a privacidade abrem sem sessão', () => {
+    for (const c of ['/entrar', '/privacy', '/api/auth/github', '/api/auth/github/callback', '/api/auth/sair']) expect(proxy(pedido(c)).status).toBe(200)
   })
 
   it('com sessão válida, libera; em /entrar, manda para o início', () => {

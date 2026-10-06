@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Logotipo } from '@/components/Estrutura'
 import { modoHospedado } from '@/lib/modo'
@@ -56,7 +57,8 @@ export default async function Entrar({ searchParams }: PageProps<'/entrar'>) {
           </li>
         </ul>
         <p className="mt-8 text-xs leading-relaxed text-paper/45">
-          Repositórios de organizações só aparecem se o app estiver instalado nelas. Ao entrar, o GitHub mostra onde instalar, e em organizações um admin pode precisar aprovar.
+          Repositórios de organizações só aparecem se o app estiver instalado nelas. Ao entrar, o GitHub mostra onde instalar, e em organizações um admin pode precisar aprovar.{' '}
+          <Link href="/privacy" className="underline underline-offset-2 hover:text-paper">Política de privacidade</Link>.
         </p>
       </div>
     </section>

@@ -23,8 +23,8 @@ const resumo = (s: string) => createHash('sha256').update(s).digest()
 /** Comparação em tempo constante (o hash iguala os tamanhos). */
 const iguais = (a: string, b: string) => timingSafeEqual(resumo(a), resumo(b))
 
-/** Abertas sem login no modo hospedado: a tela de entrada e o próprio login. */
-const PUBLICAS = ['/entrar', '/api/auth/github', '/api/auth/github/callback', '/api/auth/sair', '/icon.svg']
+/** Abertas sem login no modo hospedado: a tela de entrada, o próprio login e a política de privacidade. */
+const PUBLICAS = ['/entrar', '/privacy', '/api/auth/github', '/api/auth/github/callback', '/api/auth/sair', '/icon.svg']
 
 function hospedado(request: NextRequest) {
   const faltando = faltandoHospedado()
