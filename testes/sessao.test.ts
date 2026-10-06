@@ -116,3 +116,37 @@ describe('volta do OAuth (state anti-CSRF)', () => {
     expect(conferirVolta(pedido('/x?error=access_denied&state=abc', estado('abc')), 'github')).toEqual({ erro: 'negado' })
   })
 })
+
+describe('login com o OAuth App do GitHub', () => {
+  beforeEach(hospedado)
+
+  it('pede os escopos repo e read:org na autorização', async () => {
+    const { urlAutorizacaoGithub } = await import('@/lib/oauth')
+    const u = new URL(urlAutorizacaoGithub('https://painel.exemplo', 'st'))
+    expect(u.searchParams.get('scope')).toBe('repo read:org')
+    expect(u.searchParams.get('redirect_uri')).toBe('https://painel.exemplo/api/auth/github/callback')
+  })
+
+  it('sair revoga o token no GitHub e apaga os cookies', async () => {
+    const chamadas: { url: string; init?: RequestInit }[] = []
+    vi.stubGlobal('fetch', vi.fn(async (url: string, init?: RequestInit) => (chamadas.push({ url, init }), new Response(null, { status: 204 }))))
+    const { POST } = await import('@/app/api/auth/sair/route')
+    const r = await POST(new NextRequest('https://painel.exemplo/api/auth/sair', { method: 'POST', headers: { cookie: `${COOKIE_GITHUB}=${selar(COOKIE_GITHUB, sessao())}` } }))
+    expect(chamadas).toHaveLength(1)
+    expect(chamadas[0].url).toBe('https://api.github.com/applications/Iv1.teste/token')
+    expect(chamadas[0].init?.method).toBe('DELETE')
+    expect(JSON.parse(String(chamadas[0].init?.body))).toEqual({ access_token: 'ghu_teste' })
+    expect(r.headers.get('location')).toBe('https://painel.exemplo/entrar')
+    expect(r.headers.getSetCookie().some((c) => c.startsWith(`${COOKIE_GITHUB}=;`))).toBe(true)
+    vi.unstubAllGlobals()
+  })
+
+  it('desconectar só o Jira não revoga o GitHub', async () => {
+    const f = vi.fn()
+    vi.stubGlobal('fetch', f)
+    const { POST } = await import('@/app/api/auth/sair/route')
+    await POST(new NextRequest('https://painel.exemplo/api/auth/sair?so=jira', { method: 'POST', headers: { cookie: `${COOKIE_GITHUB}=${selar(COOKIE_GITHUB, sessao())}` } }))
+    expect(f).not.toHaveBeenCalled()
+    vi.unstubAllGlobals()
+  })
+})

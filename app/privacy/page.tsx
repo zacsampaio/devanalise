@@ -5,7 +5,7 @@ import { Logotipo } from '@/components/Estrutura'
 
 /**
  * Política de privacidade. Pública no modo hospedado (proxy.ts), para servir
- * de link no app OAuth da Atlassian ("Distribution → Sharing") e no GitHub App.
+ * de link no app OAuth da Atlassian ("Distribution → Sharing") e no OAuth App do GitHub.
  * O texto descreve o modo hospedado: é nele que outras pessoas entram.
  */
 
@@ -63,7 +63,7 @@ export default function Privacidade() {
               <b>Seu perfil público do GitHub:</b> identificador, login, nome e foto.
             </li>
             <li>
-              <b>Repositórios onde o app está instalado:</b> nome, dono e data do último push.
+              <b>Repositórios a que sua conta tem acesso:</b> nome, dono, visibilidade, linguagens, branches e data do último push.
             </li>
             <li>
               <b>Seus commits nesses repositórios:</b> mensagem, data, identificador (hash), repositório e os nomes e contagens de linhas dos arquivos alterados. Só entram
@@ -86,7 +86,8 @@ export default function Privacidade() {
         <Secao id="permissoes" titulo="2. Permissões pedidas">
           <ul>
             <li>
-              <b>GitHub App:</b> <Codigo>Contents</Codigo> e <Codigo>Metadata</Codigo>, ambas só leitura. O token vence em 8 horas.
+              <b>GitHub:</b> <Codigo>repo</Codigo> e <Codigo>read:org</Codigo>. O GitHub não oferece um escopo só de leitura para repositórios privados, então a autorização
+              permite leitura e escrita, mas o painel só faz consultas de leitura. Ao clicar em <b>Sair</b>, o token é revogado; sem isso, a sessão termina em 8 horas.
             </li>
             <li>
               <b>Atlassian (Jira):</b> <Codigo>read:jira-work</Codigo>, só leitura, e <Codigo>offline_access</Codigo>, para renovar o acesso sem pedir login de novo durante
@@ -152,9 +153,7 @@ export default function Privacidade() {
             </li>
             <li>
               <b>GitHub:</b> em{' '}
-              <Externo href="https://github.com/settings/apps/authorizations">Settings → Applications → Authorized GitHub Apps</Externo>, revogue o Painel de Entregas. Para
-              tirar o acesso a repositórios, desinstale o app em{' '}
-              <Externo href="https://github.com/settings/installations">Installed GitHub Apps</Externo>.
+              <Externo href="https://github.com/settings/applications">Settings → Applications → Authorized OAuth Apps</Externo>, revogue o Painel de Entregas.
             </li>
             <li>
               <b>Atlassian:</b> em <Externo href="https://id.atlassian.com/manage-profile/apps">Perfil → Apps conectados</Externo>, remova o acesso do painel.

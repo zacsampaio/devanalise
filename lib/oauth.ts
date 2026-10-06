@@ -4,7 +4,10 @@ import type { SessaoJira, SiteJira } from './sessao'
  * Trocas de código por token dos dois provedores. Os segredos dos apps ficam
  * só no servidor; o navegador nunca vê token nenhum (vão em cookie httpOnly).
  *
- * - GitHub App: permissões só de leitura (Contents e Metadata), token de 8 h.
+ * - GitHub (OAuth App): escopos `repo` e `read:org`, para ver na hora todos os
+ *   repositórios da pessoa, inclusive privados e de organizações, sem instalar
+ *   nada. O GitHub não tem escopo só leitura para repositório privado: o painel
+ *   só lê. O token não vence sozinho, então "Sair" o revoga.
  * - Atlassian (OAuth 2.0 3LO): read:jira-work + offline_access; o token de
  *   acesso dura 1 h e é renovado com o refresh token (que muda a cada troca).
  */
@@ -14,9 +17,12 @@ export const origemPublica = (pedido: { nextUrl: { origin: string } }) => (proce
 
 export const urlCallback = (origem: string, provedor: 'github' | 'atlassian') => `${origem}/api/auth/${provedor}/callback`
 
+export const ESCOPOS_GITHUB = 'repo read:org'
+
 export function urlAutorizacaoGithub(origem: string, state: string) {
   const u = new URL('https://github.com/login/oauth/authorize')
   u.searchParams.set('client_id', process.env.GITHUB_CLIENT_ID!.trim())
+  u.searchParams.set('scope', ESCOPOS_GITHUB)
   u.searchParams.set('redirect_uri', urlCallback(origem, 'github'))
   u.searchParams.set('state', state)
   return u.toString()
@@ -38,6 +44,23 @@ export async function trocarCodigoGithub(origem: string, code: string): Promise<
   const j = (await r.json().catch(() => ({}))) as { access_token?: string; expires_in?: number; error?: string }
   if (!r.ok || !j.access_token) throw new Error(`GitHub recusou o login${j.error ? ` (${j.error})` : ''}`)
   return { token: j.access_token, expiraEm: j.expires_in ? Date.now() + j.expires_in * 1000 : null }
+}
+
+/** Revoga o token do GitHub (ao sair). Falha não impede a saída: os cookies são apagados de qualquer jeito. */
+export async function revogarTokenGithub(token: string) {
+  const id = process.env.GITHUB_CLIENT_ID!.trim()
+  const credencial = Buffer.from(`${id}:${process.env.GITHUB_CLIENT_SECRET!.trim()}`).toString('base64')
+  try {
+    await fetch(`https://api.github.com/applications/${encodeURIComponent(id)}/token`, {
+      method: 'DELETE',
+      headers: { Authorization: `Basic ${credencial}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ access_token: token }),
+      cache: 'no-store',
+      signal: AbortSignal.timeout(10_000),
+    })
+  } catch (erro) {
+    console.error('[painel] não foi possível revogar o token do GitHub:', erro instanceof Error ? erro.message : erro)
+  }
 }
 
 export const ESCOPOS_ATLASSIAN = 'read:jira-work offline_access'

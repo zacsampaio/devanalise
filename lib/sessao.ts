@@ -65,7 +65,7 @@ export const opcoesCookie = (segundos: number) => ({
   maxAge: Math.max(0, Math.floor(segundos)),
 })
 
-/** Validade da sessão do GitHub: 8 h (a do token do GitHub App), sem renovação. */
+/** Validade da sessão do GitHub: 8 h, sem renovação (o token do OAuth App não vence; "Sair" o revoga). */
 export const DURACAO_GITHUB = 8 * 3600
 
 /**

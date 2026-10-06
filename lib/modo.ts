@@ -4,7 +4,7 @@
  * - local: uma pessoa, com GITHUB_TOKEN (e JIRA_*) no .env, senha HTTP Basic
  *   e a coleta salva em data/. É o modo de quem baixa o projeto.
  * - hospedado: GITHUB_CLIENT_ID definido (ex.: na Vercel). Cada pessoa entra
- *   com a conta do GitHub (GitHub App) e, se quiser, conecta o Jira (OAuth da
+ *   com a conta do GitHub (OAuth App) e, se quiser, conecta o Jira (OAuth da
  *   Atlassian). O servidor não guarda nada: o login fica num cookie
  *   criptografado no navegador dela, e a coleta, só na aba aberta.
  */

@@ -53,7 +53,7 @@ export function EstadoVazio({ aviso, progresso, hospedado = false }: { aviso?: s
         {hospedado ? (
           <ol className="mt-8 list-decimal space-y-3 pl-5 text-base leading-relaxed text-subtle">
             <li>
-              O painel só enxerga os repositórios em que o app foi <b className="font-medium text-ink">instalado</b>. No GitHub, abra <b className="font-medium text-ink">Settings → Applications</b> e confira as contas e organizações liberadas (em organizações, um admin pode precisar aprovar).
+              Organizações que restringem apps de terceiros precisam <b className="font-medium text-ink">aprovar</b> o painel. No GitHub, abra <b className="font-medium text-ink">Settings → Applications → Authorized OAuth Apps</b>, entre no painel e peça acesso (Request) à organização; um owner aprova.
             </li>
             <li>Para o commit contar como seu, o e-mail do git precisa estar verificado na sua conta do GitHub.</li>
             <li>Commits com mais de 12 meses ficam de fora.</li>

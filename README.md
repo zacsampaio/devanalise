@@ -24,14 +24,14 @@ Dashboard das suas entregas montado a partir dos **seus commits no GitHub** e do
 | `/demandas` | Todas as demandas com filtros (tipo, sistema, impacto, busca). Aceita filtros na URL: `?impacto=alto`, `?tipo=correcao`, `?q=webhook` |
 | `/demandas/<chamado>` | Uma demanda: chamado no Jira, período, linha do tempo dos commits e arquivos mais alterados |
 | `/sistemas` e `/sistemas/<repo>` | Repositórios agrupados pelo dono e o histórico de cada um |
-| `/privacy` | Política de privacidade. Pública no modo hospedado, para o link pedido pela Atlassian e pelo GitHub App |
+| `/privacy` | Política de privacidade. Pública no modo hospedado, para o link pedido pela Atlassian e pelo GitHub |
 
 ## Dois modos: local ou hospedado
 
 | | Local | Hospedado |
 |---|---|---|
 | Para quem | Você, na sua máquina ou no seu servidor | Qualquer pessoa, num endereço público (ex.: Vercel) |
-| Login no GitHub | Token seu no `.env` (`GITHUB_TOKEN`) | Cada pessoa entra com a própria conta (GitHub App, só leitura) |
+| Login no GitHub | Token seu no `.env` (`GITHUB_TOKEN`) | Cada pessoa entra com a própria conta (OAuth App do GitHub) |
 | Jira | Token no `.env` (`JIRA_*`) | Cada pessoa conecta a própria conta Atlassian (OAuth) |
 | Proteção | Senha HTTP Basic (`PAINEL_SENHA`) | O próprio login do GitHub |
 | Onde ficam os dados | `data/ultima-coleta.json`, no servidor | Só na aba do navegador da pessoa. O servidor não guarda nada |
@@ -177,20 +177,20 @@ Como funciona:
 - Os commits coletados ficam só na aba (memória e `sessionStorage`). Fechar a aba ou sair apaga tudo. Entrar de novo recoleta, o que leva de segundos a alguns minutos, conforme a quantidade de repositórios.
 - Não há banco de dados. Não é preciso configurar armazenamento na Vercel.
 
-### 1. Crie o GitHub App
+### 1. Crie o OAuth App do GitHub
 
-1. No GitHub: foto → **Settings** → **Developer settings** → **GitHub Apps** → **New GitHub App**. Para o app ficar na sua organização, crie-o nas configurações dela.
+1. No GitHub: foto → **Settings** → **Developer settings** → **OAuth Apps** → **New OAuth App**. Para o app ficar na sua organização, crie-o nas configurações dela.
 2. Preencha:
-   - **GitHub App name**: ex.: `painel-entregas`.
+   - **Application name**: ex.: `painel-entregas`.
    - **Homepage URL**: o endereço do painel, ex.: `https://painel-entregas.vercel.app`.
-   - **Callback URL**: `https://SEU-ENDERECO/api/auth/github/callback`.
-   - Deixe marcado **Expire user authorization tokens**.
-   - **Webhook**: desmarque **Active**.
-   - **Permissions → Repository permissions**: **Contents** `Read-only` e **Metadata** `Read-only`. Nada mais.
-   - **Where can this GitHub App be installed?**: **Any account**, para outras pessoas poderem usar.
-3. **Create GitHub App**. Na página do app, copie o **Client ID** e clique em **Generate a new client secret**.
+   - **Authorization callback URL**: `https://SEU-ENDERECO/api/auth/github/callback`.
+3. **Register application**. Copie o **Client ID** e clique em **Generate a new client secret**.
 
-> O app só enxerga repositórios de contas e organizações onde ele está **instalado** (página do app → **Install App**). Cada pessoa instala na própria conta. Em organizações, um admin instala ou aprova. Sem isso, os repositórios da organização não aparecem.
+Ao entrar, a pessoa autoriza os escopos `repo` e `read:org` e o painel já enxerga todos os repositórios dela: pessoais, de colaboração e de organizações. Não há nada para instalar.
+
+> O GitHub não tem escopo só leitura para repositórios privados em OAuth Apps: `repo` permite leitura e escrita. O painel só lê. O token não vence sozinho, então **Sair** o revoga; se a pessoa só fechar a aba, o login do painel termina em 8 horas e ela pode revogar em **Settings → Applications → Authorized OAuth Apps**.
+
+> Organizações com **restrição a apps de terceiros** (OAuth app access restrictions) escondem os repositórios privados até um owner aprovar o app. Na tela de autorização, a pessoa clica em **Request** ao lado da organização; o owner aprova uma vez e vale para todo mundo.
 
 ### 2. (Opcional) Crie o app da Atlassian, para o botão "Conectar Jira"
 
@@ -209,8 +209,8 @@ Se a conta tiver acesso a mais de um site do Jira, o painel pergunta qual usar.
 
    | Variável | Valor |
    |---|---|
-   | `GITHUB_CLIENT_ID` | Client ID do GitHub App |
-   | `GITHUB_CLIENT_SECRET` | Client secret do GitHub App |
+   | `GITHUB_CLIENT_ID` | Client ID do OAuth App |
+   | `GITHUB_CLIENT_SECRET` | Client secret do OAuth App |
    | `SESSAO_SEGREDO` | 32+ caracteres aleatórios: `node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"` |
    | `ATLASSIAN_CLIENT_ID` / `ATLASSIAN_CLIENT_SECRET` | Opcional, do app da Atlassian |
    | `PAINEL_URL` | Opcional: o endereço público, se o painel tiver mais de um domínio |
@@ -221,7 +221,7 @@ Se a conta tiver acesso a mais de um site do Jira, o painel pergunta qual usar.
 
 Trocar o `SESSAO_SEGREDO` desconecta todo mundo, porque os cookies antigos deixam de abrir. Isso é útil se ele vazar.
 
-Para testar o modo hospedado na sua máquina, crie um segundo GitHub App com a Callback URL `http://localhost:3000/api/auth/github/callback` e preencha as mesmas variáveis no `.env`.
+Para testar o modo hospedado na sua máquina, crie um segundo OAuth App com a Callback URL `http://localhost:3000/api/auth/github/callback` e preencha as mesmas variáveis no `.env`.
 
 ## Referência do `.env`
 
@@ -241,8 +241,8 @@ Para testar o modo hospedado na sua máquina, crie um segundo GitHub App com a C
 | `PAINEL_SENHA` | em produção | — | Senha do login do painel |
 | `PAINEL_PUBLICO` | não | — | `true` libera produção sem senha |
 | `PAINEL_DEV_ORIGENS` | não | — | Origens extras para o `npm run dev` (ex.: `192.168.0.10`) |
-| `GITHUB_CLIENT_ID` | hospedado | — | Liga o modo hospedado. Client ID do GitHub App ([como criar](#1-crie-o-github-app)) |
-| `GITHUB_CLIENT_SECRET` | hospedado | — | Client secret do GitHub App |
+| `GITHUB_CLIENT_ID` | hospedado | — | Liga o modo hospedado. Client ID do OAuth App ([como criar](#1-crie-o-oauth-app-do-github)) |
+| `GITHUB_CLIENT_SECRET` | hospedado | — | Client secret do OAuth App |
 | `SESSAO_SEGREDO` | hospedado | — | Chave dos cookies de login (32+ caracteres) |
 | `ATLASSIAN_CLIENT_ID` / `ATLASSIAN_CLIENT_SECRET` | não | — | App OAuth da Atlassian, para "Conectar Jira" |
 | `PAINEL_URL` | não | origem do pedido | Endereço público usado nas URLs de retorno do OAuth |
@@ -293,7 +293,7 @@ Modo hospedado:
 - Sem login do GitHub, nenhuma página nem rota `/api/coleta` abre (`proxy.ts`).
 - Os cookies de sessão são criptografados e autenticados (AES-256-GCM), httpOnly, `Secure` e `SameSite=Lax`. Um cookie adulterado, vencido ou de outro nome é recusado.
 - O OAuth usa `state` aleatório conferido na volta, contra CSRF no login.
-- O token do GitHub App é só leitura e vence em 8 horas. O da Atlassian dura 1 hora e é renovado no caminho, dentro do mesmo cookie.
+- O token do GitHub (escopos `repo` e `read:org`) é revogado ao sair; sem isso, a sessão do painel termina em 8 horas. O painel só faz consultas de leitura. O da Atlassian dura 1 hora e é renovado no caminho, dentro do mesmo cookie.
 - As rotas `/api/coleta` só aceitam as consultas fixas do painel, com parâmetros validados, e o autor dos commits é sempre quem está logado.
 - Nada é gravado no servidor. As respostas com dados de uma pessoa saem com `Cache-Control: no-store` e não vão para o cache compartilhado.
 

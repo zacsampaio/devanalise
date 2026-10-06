@@ -47,7 +47,7 @@ export default async function Entrar({ searchParams }: PageProps<'/entrar'>) {
 
         <ul className="mt-14 grid gap-6 border-t border-white/10 pt-8 text-sm leading-relaxed text-paper/60 sm:grid-cols-3">
           <li>
-            <b className="block font-medium text-paper">Só leitura</b>O app pede leitura do conteúdo dos repositórios. Ele não escreve nada.
+            <b className="block font-medium text-paper">Só leitura</b>O GitHub pede acesso aos repositórios para o painel ler seus commits. Ele nunca escreve nada.
           </li>
           <li>
             <b className="block font-medium text-paper">Nada guardado</b>Seus commits ficam só nesta aba do navegador. O servidor não salva nada.
@@ -57,7 +57,7 @@ export default async function Entrar({ searchParams }: PageProps<'/entrar'>) {
           </li>
         </ul>
         <p className="mt-8 text-xs leading-relaxed text-paper/45">
-          Repositórios de organizações só aparecem se o app estiver instalado nelas. Ao entrar, o GitHub mostra onde instalar, e em organizações um admin pode precisar aprovar.{' '}
+          Organizações que restringem apps de terceiros mostram um botão “Request” na autorização: um owner aprova uma vez e os repositórios dela passam a aparecer.{' '}
           <Link href="/privacy" className="underline underline-offset-2 hover:text-paper">Política de privacidade</Link>.
         </p>
       </div>
