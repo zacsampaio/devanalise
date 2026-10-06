@@ -78,7 +78,7 @@ export function EstadoVazio({ aviso, progresso, hospedado = false }: { aviso?: s
 
 export function CabecalhoSecao({ eyebrow, titulo, texto, escuro = false, acao }: { eyebrow: string; titulo: ReactNode; texto?: string; escuro?: boolean; acao?: { href: string; rotulo: string } }) {
   return (
-    <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-end">
       <div className="lg:col-span-7">
         <Revelar>
           <p className={`eyebrow flex items-center gap-3 ${escuro ? 'text-accent-light' : 'text-accent'}`}>

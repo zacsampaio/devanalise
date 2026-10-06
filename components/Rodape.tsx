@@ -10,7 +10,7 @@ export function Rodape({ dados }: { dados: DadosRodape }) {
   const { kpis, periodo, usuario, jiraAtivo } = dados
   return (
     <footer className="bg-ink-deep py-16 text-paper" style={{ backgroundColor: '#0e0c16' }}>
-      <div className="shell grid gap-10 lg:grid-cols-12">
+      <div className="shell grid grid-cols-1 gap-10 lg:grid-cols-12">
         <div className="lg:col-span-4">
           <Logotipo />
           <p className="mt-4 text-sm text-paper/55">Painel de entregas a partir dos seus commits no GitHub e dos chamados no Jira.</p>

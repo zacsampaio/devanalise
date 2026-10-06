@@ -16,17 +16,19 @@ export function Cartao({
   children: ReactNode
 }) {
   return (
-    <section className={`flex flex-col rounded-lg border border-line bg-paper p-5 sm:p-6 ${className}`}>
-      <header className="flex items-start justify-between gap-4">
-        <div>
+    // min-w-0: item de grid não encolhe abaixo do conteúdo (gráficos) sem isso, e a página inteira alarga no celular
+    <section className={`flex min-w-0 flex-col rounded-lg border border-line bg-paper p-5 sm:p-6 ${className}`}>
+      {/* o link fica na linha do título: assim o subtítulo usa a largura toda no celular */}
+      <header>
+        <div className="flex items-baseline justify-between gap-4">
           <h2 className="text-[15px] font-medium tracking-tight text-ink-deep">{titulo}</h2>
-          {subtitulo && <p className="mt-1 text-xs leading-relaxed text-subtle">{subtitulo}</p>}
+          {acao && (
+            <Link href={acao.href} className="shrink-0 text-xs font-medium text-accent hover:underline">
+              {acao.rotulo} →
+            </Link>
+          )}
         </div>
-        {acao && (
-          <Link href={acao.href} className="shrink-0 text-xs font-medium text-accent hover:underline">
-            {acao.rotulo} →
-          </Link>
-        )}
+        {subtitulo && <p className="mt-1 text-xs leading-relaxed text-subtle">{subtitulo}</p>}
       </header>
       <div className="mt-5 flex-1">{children}</div>
     </section>

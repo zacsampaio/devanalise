@@ -23,7 +23,7 @@ export function GraficoMensal({ meses, rotuloDemandas = 'Demandas concluídas' }
 
   return (
     <figure className="relative">
-      <div className="relative flex gap-3 pl-9">
+      <div className="relative flex gap-1 pl-9 sm:gap-3">
         {/* grade e eixo y recessivos */}
         <div className="pointer-events-none absolute inset-y-0 left-0 right-0" style={{ height: ALTURA }}>
           {marcas.map((v) => (
@@ -37,7 +37,7 @@ export function GraficoMensal({ meses, rotuloDemandas = 'Demandas concluídas' }
         {meses.map((m, i) => (
           <div
             key={m.chave}
-            className="relative flex flex-1 flex-col items-center"
+            className="relative flex min-w-0 flex-1 flex-col items-center"
             onMouseEnter={() => setAtivo(i)}
             onMouseLeave={() => setAtivo(null)}
             onFocus={() => setAtivo(i)}
@@ -66,12 +66,17 @@ export function GraficoMensal({ meses, rotuloDemandas = 'Demandas concluídas' }
                 </span>
               )}
             </div>
-            <span className="mt-3 text-xs uppercase tracking-[0.12em] text-subtle">{m.rotulo}</span>
+            {/* no celular não cabem 12 rótulos: só meses alternados, contando do último */}
+            <span className={`mt-3 text-[11px] uppercase text-subtle sm:text-xs sm:tracking-[0.12em] ${(meses.length - 1 - i) % 2 ? 'max-sm:invisible' : ''}`}>{m.rotulo}</span>
 
             {ativo === i && (
               <div
-                className="pointer-events-none absolute z-20 w-48 -translate-x-1/2 rounded-md bg-ink-deep p-3.5 text-paper shadow-xl"
-                style={{ bottom: Math.min((m.commits / teto) * ALTURA + 40, ALTURA), left: '50%' }}
+                className="pointer-events-none absolute z-20 w-48 rounded-md bg-ink-deep p-3.5 text-paper shadow-xl"
+                style={{
+                  bottom: Math.min((m.commits / teto) * ALTURA + 40, ALTURA),
+                  // nas pontas, o tooltip abre para dentro do gráfico
+                  ...(i < 2 ? { left: 0 } : i > meses.length - 3 ? { right: 0 } : { left: '50%', transform: 'translateX(-50%)' }),
+                }}
               >
                 <p className="eyebrow text-signal-light">{m.rotulo} · {m.chave.slice(0, 4)}</p>
                 <dl className="mt-3 space-y-1.5 text-sm">

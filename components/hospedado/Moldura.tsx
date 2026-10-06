@@ -27,7 +27,8 @@ function Conta() {
         <span aria-hidden className={`h-1.5 w-1.5 rounded-full ${jira ? 'bg-signal' : 'bg-white/25'}`} />
         <span className="sr-only">Conta de {usuario.login}</span>
       </summary>
-      <div className="absolute right-0 top-11 w-72 rounded-lg border border-white/10 bg-ink-deep p-4 text-sm text-paper shadow-2xl">
+      {/* no celular, 18rem ancorados no avatar saem pela esquerda: o menu ocupa a largura do cabeçalho (o backdrop-blur dele é o bloco de contenção do fixed) */}
+      <div className="absolute right-0 top-11 w-72 max-sm:fixed max-sm:inset-x-5 max-sm:top-[4.5rem] max-sm:w-auto rounded-lg border border-white/10 bg-ink-deep p-4 text-sm text-paper shadow-2xl">
         <p className="font-medium">{usuario.nome}</p>
         <p className="font-mono text-xs text-paper/55">@{usuario.login}</p>
 

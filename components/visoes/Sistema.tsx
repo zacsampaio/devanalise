@@ -50,7 +50,7 @@ export function VisaoSistema({ dados }: { dados: DadosSistema }) {
       </HeroPagina>
 
       <section className="py-24 lg:py-28">
-        <div className="shell grid gap-12 lg:grid-cols-12">
+        <div className="shell grid grid-cols-1 gap-12 lg:grid-cols-12">
           <div className="lg:col-span-8">
             <CabecalhoSecao eyebrow="Ritmo" titulo={<>Trabalho <span className="italic text-accent">mês a mês</span>.</>} />
             <Revelar className="mt-10">
@@ -73,7 +73,7 @@ export function VisaoSistema({ dados }: { dados: DadosSistema }) {
           <div aria-hidden className="pointer-events-none absolute left-1/2 top-0 h-[26rem] w-[44rem] -translate-x-1/2 rounded-full bg-accent/15 blur-[160px]" />
           <div className="shell relative">
             <CabecalhoSecao escuro eyebrow="Alto impacto" titulo={<>O que mais <span className="brand-gradient-text-dark">mudou neste sistema</span>.</>} />
-            <div className="mt-12 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
               {alto.slice(0, 6).map((d, i) => (
                 <Revelar key={d.id} delay={(i % 3) * 90}>
                   <CartaoDestaque d={d} />

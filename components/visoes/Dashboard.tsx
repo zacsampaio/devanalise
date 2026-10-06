@@ -96,7 +96,7 @@ export function VisaoDashboard({ d, periodoId, visibilidade, hospedado = false }
             </div>
 
             {/* entregas e tipos */}
-            <div className="mt-4 grid gap-4 lg:grid-cols-12">
+            <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-12">
               <Cartao className="lg:col-span-8" titulo="Demandas concluídas por mês" subtitulo="Pela data do último commit da demanda, por tipo de entrega." acao={{ href: '/demandas', rotulo: 'Demandas' }}>
                 <GraficoEntregas meses={d.entregasMes} />
               </Cartao>
@@ -116,7 +116,7 @@ export function VisaoDashboard({ d, periodoId, visibilidade, hospedado = false }
             </div>
 
             {/* atividade */}
-            <div className="mt-4 grid gap-4 lg:grid-cols-12">
+            <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-12">
               <Cartao className="lg:col-span-8" titulo="Commits por semana" subtitulo="Ritmo de trabalho, semana a semana.">
                 <GraficoLinhas pontos={d.semanas} series={[{ id: 'commits', rotulo: 'Commits', cor: COR_COMMITS }]} altura={240} area />
               </Cartao>
@@ -126,7 +126,7 @@ export function VisaoDashboard({ d, periodoId, visibilidade, hospedado = false }
             </div>
 
             {/* áreas, sistemas, calor */}
-            <div className="mt-4 grid gap-4 lg:grid-cols-12">
+            <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-12">
               <Cartao className="lg:col-span-6" titulo="Impacto por conta ou organização" subtitulo="Demandas concluídas, pelo dono do repositório principal." acao={{ href: '/sistemas', rotulo: 'Sistemas' }}>
                 <BarrasHorizontais
                   linhas={d.areas.map((a) => ({ rotulo: a.rotulo, valores: a.valores }))}
@@ -145,7 +145,7 @@ export function VisaoDashboard({ d, periodoId, visibilidade, hospedado = false }
               </Cartao>
             </div>
 
-            <div className="mt-4 grid gap-4 lg:grid-cols-12">
+            <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-12">
               <Cartao className={d.statusJira ? 'lg:col-span-5' : 'lg:col-span-7'} titulo="Quando você commita" subtitulo="Commits por dia da semana e faixa de horário.">
                 <MapaCalor linhas={d.calor.dias} colunas={d.calor.faixas} valores={d.calor.valores} />
               </Cartao>

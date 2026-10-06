@@ -39,7 +39,7 @@ export function GraficoEntregas({ meses }: { meses: Mes[] }) {
         ))}
       </ul>
 
-      <div className="relative flex gap-2 pl-8 sm:gap-3">
+      <div className="relative flex gap-1 pl-8 sm:gap-3">
         <div className="pointer-events-none absolute inset-x-0 top-0" style={{ height: ALTURA }}>
           {marcas.map((v) => (
             <div key={v} className="absolute left-0 right-0 flex items-center" style={{ bottom: (v / teto) * ALTURA - 0.5 }}>
@@ -55,7 +55,7 @@ export function GraficoEntregas({ meses }: { meses: Mes[] }) {
           return (
             <div
               key={m.chave}
-              className="relative flex flex-1 flex-col items-center outline-none"
+              className="relative flex min-w-0 flex-1 flex-col items-center outline-none"
               onMouseEnter={() => setAtivo(i)}
               onMouseLeave={() => setAtivo(null)}
               onFocus={() => setAtivo(i)}
@@ -87,11 +87,12 @@ export function GraficoEntregas({ meses }: { meses: Mes[] }) {
                   </span>
                 )}
               </div>
-              <span className="mt-3 text-xs uppercase tracking-[0.12em] text-subtle">{m.rotulo}</span>
+              {/* no celular não cabem 12 rótulos: só meses alternados, contando do último */}
+              <span className={`mt-3 text-[11px] uppercase text-subtle sm:text-xs sm:tracking-[0.12em] ${(meses.length - 1 - i) % 2 ? 'max-sm:invisible' : ''}`}>{m.rotulo}</span>
 
               {ativo === i && (
                 <div
-                  className="pointer-events-none absolute z-20 w-56 rounded-md bg-ink-deep p-4 text-paper shadow-xl"
+                  className="pointer-events-none absolute z-20 w-56 max-w-[80vw] rounded-md bg-ink-deep p-4 text-paper shadow-xl"
                   style={{
                     bottom: Math.min((total / teto) * ALTURA + 40, ALTURA),
                     // nas pontas, o tooltip abre para dentro do gráfico

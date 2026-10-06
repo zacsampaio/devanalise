@@ -43,7 +43,7 @@ export function VisaoSistemas({ painel, hospedado = false }: { painel: Painel; h
                   {area} · {lista.length} repositório{lista.length > 1 ? 's' : ''}
                 </p>
               </Revelar>
-              <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
                 {lista.map((s, i) => {
                   const total = s.commits
                   const alto = altoPorRepo(s.repo)

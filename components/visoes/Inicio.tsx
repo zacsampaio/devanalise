@@ -57,11 +57,11 @@ export function VisaoInicio({ painel, hospedado = false }: { painel: Painel; hos
         <div aria-hidden className="pointer-events-none absolute -left-32 bottom-0 h-[26rem] w-[26rem] rounded-full bg-signal/15 blur-[120px]" />
 
         <div className="shell relative">
-          <div className="grid items-end gap-12 lg:grid-cols-12">
+          <div className="grid grid-cols-1 items-end gap-12 lg:grid-cols-12">
             <div className="lg:col-span-7">
               <Revelar>
                 {/* o comando que "gera" a página: o histórico do autor no período */}
-                <p className="break-all font-mono text-sm text-paper/60">
+                <p className="font-mono text-sm text-paper/60 [overflow-wrap:anywhere]">
                   <span className="text-signal-light">$</span> git log{usuario ? ` --author=${usuario.login}` : ''} --since={periodo.inicio.slice(0, 7)}
                   <span aria-hidden className="cursor-piscando" />
                 </p>
@@ -133,7 +133,7 @@ export function VisaoInicio({ painel, hospedado = false }: { painel: Painel; hos
               texto="Cada barra é o que foi concluído no mês, pelo tipo de entrega. Passe o mouse para ver o detalhe."
             />
           </div>
-          <div className="mt-14 grid gap-10 lg:grid-cols-12">
+          <div className="mt-14 grid grid-cols-1 gap-10 lg:grid-cols-12">
             <Revelar className="lg:col-span-9">
               <GraficoEntregas meses={entregasMes} />
             </Revelar>
@@ -177,7 +177,7 @@ export function VisaoInicio({ painel, hospedado = false }: { painel: Painel; hos
             titulo={<>Os temas que <span className="brand-gradient-text-dark">atravessam o trabalho</span>.</>}
             texto="Temas que atravessam os repositórios. Uma mesma demanda pode contribuir para mais de uma frente."
           />
-          <div className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-6">
+          <div className="mt-14 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-6">
             {frentes.map((f, i) => (
               <Revelar key={f.id} delay={(i % 3) * 90} className={i < 2 ? 'lg:col-span-3' : 'lg:col-span-2'}>
                 <article className="flex h-full flex-col rounded-lg border border-white/10 bg-white/[0.03] p-6 sm:p-7">
@@ -218,7 +218,7 @@ export function VisaoInicio({ painel, hospedado = false }: { painel: Painel; hos
             texto="Demandas agrupadas pelo dono do repositório principal em que foram feitas."
             acao={{ href: '/sistemas', rotulo: 'Ver sistemas' }}
           />
-          <div className="mt-14 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div className="mt-14 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
             {areas.map((a, i) => (
               <Revelar key={a.area} delay={(i % 3) * 80}>
                 <article className="flex h-full flex-col rounded-lg border border-line bg-paper p-6 sm:p-7">
@@ -281,7 +281,7 @@ export function VisaoInicio({ painel, hospedado = false }: { painel: Painel; hos
               texto={`As ${destaques.length} maiores entregas de alto impacto, pelo volume de trabalho. São ${kpis.altoImpacto} no total.`}
               acao={{ href: '/demandas?impacto=alto', rotulo: `Ver as ${kpis.altoImpacto}` }}
             />
-            <div className="mt-14 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            <div className="mt-14 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
               {destaques.map((d, i) => (
                 <Revelar key={d.id} delay={(i % 3) * 90}>
                   <CartaoDestaque d={d} />
@@ -305,7 +305,7 @@ export function VisaoInicio({ painel, hospedado = false }: { painel: Painel; hos
               acao={{ href: '/dashboard', rotulo: 'Abrir o dashboard' }}
             />
           </div>
-          <div className="mt-14 grid gap-12 lg:grid-cols-12">
+          <div className="mt-14 grid grid-cols-1 gap-12 lg:grid-cols-12">
             <Revelar className="lg:col-span-8">
               <GraficoMensal meses={meses} />
             </Revelar>

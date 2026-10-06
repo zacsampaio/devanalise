@@ -141,7 +141,7 @@ export function VisaoDemanda({ dados, arquivos }: { dados: DadosDemanda; arquivo
       </HeroPagina>
 
       <section className="py-20 lg:py-24">
-        <div className="shell grid gap-14 lg:grid-cols-12">
+        <div className="shell grid grid-cols-1 gap-14 lg:grid-cols-12">
           {/* linha do tempo */}
           <div className="lg:col-span-8">
             <p className="eyebrow flex items-center gap-3 text-accent">
@@ -191,7 +191,7 @@ export function VisaoDemanda({ dados, arquivos }: { dados: DadosDemanda; arquivo
 
       {/* navegação entre demandas, em ordem cronológica */}
       <nav className="border-t border-line">
-        <div className="shell grid sm:grid-cols-2">
+        <div className="shell grid grid-cols-1 sm:grid-cols-2">
           {anterior ? (
             <Link href={`/demandas/${anterior.slug}`} className="group border-line py-10 sm:border-r sm:pr-8">
               <span className="eyebrow text-subtle">← Anterior</span>

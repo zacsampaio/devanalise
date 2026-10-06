@@ -107,14 +107,14 @@ export function VisaoPortfolio({ dados, visibilidade, hospedado = false }: { dad
             return (
               <>
                 {emDuas.length > 0 && (
-                  <div className="mt-6 grid gap-6 md:grid-cols-2">
+                  <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
                     {emDuas.map((p) => (
                       <CardProjeto key={p.repo} p={p} temLinguagens={temLinguagens} />
                     ))}
                   </div>
                 )}
                 {emTres.length > 0 && (
-                  <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {emTres.map((p) => (
                       <CardProjeto key={p.repo} p={p} compacto temLinguagens={temLinguagens} />
                     ))}
@@ -133,7 +133,7 @@ export function VisaoPortfolio({ dados, visibilidade, hospedado = false }: { dad
               <p className="max-w-2xl text-sm leading-relaxed text-subtle">
                 Por regras, sem inteligência artificial. Cada critério é medido em relação ao repositório que mais se destacou nele, e a soma ponderada dá uma nota de 0 a 100.
               </p>
-              <dl className="mt-6 grid gap-x-8 gap-y-5 sm:grid-cols-2 lg:grid-cols-3">
+              <dl className="mt-6 grid grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2 lg:grid-cols-3">
                 {CRITERIOS.map((c) => (
                   <div key={c.id}>
                     <dt className="flex items-baseline gap-2 font-medium text-ink-deep">
@@ -263,7 +263,7 @@ function Detalhes({ p, temLinguagens }: { p: Projeto; temLinguagens: boolean }) 
         ))}
       </dl>
 
-      <div className="grid gap-10 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-10 sm:grid-cols-2">
         <div>
           <h4 className="eyebrow text-subtle">Tipos de entrega</h4>
           <div className="mt-4">
@@ -295,7 +295,7 @@ function Detalhes({ p, temLinguagens }: { p: Projeto; temLinguagens: boolean }) 
         </div>
       </div>
 
-      <div className="grid gap-10 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-10 sm:grid-cols-2">
         <div>
           <h4 className="eyebrow text-subtle">Atividade no período</h4>
           <div className="mt-4 flex h-14 items-end gap-[3px]" role="img" aria-label={`Commits por mês: ${p.atividade.join(', ')}`}>

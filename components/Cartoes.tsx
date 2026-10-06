@@ -7,7 +7,7 @@ import { periodo, SeloAutomatica, SeloImpacto, SeloStatusJira, SeloTipo } from '
 export function LinhaDemanda({ d }: { d: Demanda }) {
   const total = d.nCommits
   return (
-    <Link href={`/demandas/${d.slug}`} className="group grid gap-4 py-6 transition-colors hover:bg-muted/70 md:grid-cols-12 md:gap-6 md:px-3">
+    <Link href={`/demandas/${d.slug}`} className="group grid grid-cols-1 gap-4 py-6 transition-colors hover:bg-muted/70 md:grid-cols-12 md:gap-6 md:px-3">
       <div className="md:col-span-2">
         <p className={`text-sm font-medium tabular-nums ${d.rotulo === 'Sem chamado' ? 'text-subtle' : 'text-accent'}`}>{d.rotulo}</p>
         <p className="mt-1 text-xs text-subtle">{periodo(d.inicio, d.fim)}</p>

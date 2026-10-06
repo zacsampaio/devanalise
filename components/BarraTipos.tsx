@@ -29,7 +29,7 @@ export function BarraTipos({ porTipo, escuro = false, legenda = true }: { porTip
         ))}
       </div>
       {legenda && (
-        <ul className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 sm:grid-cols-3">
+        <ul className="mt-4 grid grid-cols-1 gap-x-4 gap-y-2 min-[25rem]:grid-cols-2 sm:grid-cols-3">
           {presentes.map((t) => (
             <li
               key={t}

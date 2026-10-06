@@ -34,7 +34,7 @@ export function VisaoDemandas({ painel, inicial, hospedado = false }: { painel: 
         titulo={<>Cada entrega, <span className="brand-gradient-text-dark">com o que ela trouxe</span>.</>}
         texto="Filtre por tipo, sistema ou impacto. Cada demanda tem uma página com o chamado no Jira, o período e os commits que a compõem."
       >
-        <div className="mt-12 grid gap-6 border-t border-white/10 pt-10 lg:grid-cols-12">
+        <div className="mt-12 grid grid-cols-1 gap-6 border-t border-white/10 pt-10 lg:grid-cols-12">
           <Revelar className="lg:col-span-5">
             <p className="eyebrow text-paper/55">Por tipo de entrega</p>
             <div className="mt-5">

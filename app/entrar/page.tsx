@@ -45,7 +45,7 @@ export default async function Entrar({ searchParams }: PageProps<'/entrar'>) {
           Entrar com GitHub
         </a>
 
-        <ul className="mt-14 grid gap-6 border-t border-white/10 pt-8 text-sm leading-relaxed text-paper/60 sm:grid-cols-3">
+        <ul className="mt-14 grid grid-cols-1 gap-6 border-t border-white/10 pt-8 text-sm leading-relaxed text-paper/60 sm:grid-cols-3">
           <li>
             <b className="block font-medium text-paper">Só leitura</b>O GitHub pede acesso aos repositórios para o painel ler seus commits. Ele nunca escreve nada.
           </li>

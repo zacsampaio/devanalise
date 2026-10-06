@@ -71,7 +71,7 @@ export function FeedCommits({ commits }: { commits: CommitFeed[] }) {
       <BarraLista contagem={`${commits.length} commits recentes`} />
       <ul className="mt-4 divide-y divide-line">
         {commits.slice(0, limite).map((c) => (
-          <li key={`${c.hash}-${c.sistema}`} className="grid items-center gap-x-4 gap-y-1 py-3 text-sm md:grid-cols-[minmax(0,1fr)_auto]">
+          <li key={`${c.hash}-${c.sistema}`} className="grid grid-cols-1 items-center gap-x-4 gap-y-1 py-3 text-sm md:grid-cols-[minmax(0,1fr)_auto]">
             <div className="min-w-0">
               <p className="truncate text-ink-deep" title={c.assunto}>
                 {c.assunto}
